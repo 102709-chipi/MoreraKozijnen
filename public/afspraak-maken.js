@@ -283,7 +283,9 @@ function showBookingForm() {
     const form = document.getElementById('bookingForm');
     form.style.display = 'block';
     
-    const date = new Date(selectedDate);
+    // Parse date correctly to avoid timezone issues
+    const [year, month, day] = selectedDate.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     const dateStr = date.toLocaleDateString('nl-NL', { 
         weekday: 'long', 
         year: 'numeric', 
