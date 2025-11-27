@@ -231,19 +231,17 @@ function selectDate(dateStr) {
     renderCalendar();
     renderTimeSlots();
     
-    // Parse date and format manually to avoid ANY timezone issues
+    // Parse date in NL timezone
     const [year, month, day] = dateStr.split('-').map(Number);
     
-    // Create a date at noon to avoid timezone edge cases
-    const date = new Date(year, month - 1, day, 12, 0, 0);
-    
-    // Get day name manually
-    const dayNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
-    const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
-    
-    const dayName = dayNames[date.getDay()];
-    const monthName = monthNames[date.getMonth()];
-    const dateDisplay = `${dayName} ${date.getDate()} ${monthName} ${date.getFullYear()}`;
+    // Force NL locale formatting
+    const dateDisplay = new Intl.DateTimeFormat('nl-NL', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'Europe/Amsterdam'
+    }).format(new Date(year, month - 1, day));
     
     document.getElementById('selectedDateDisplay').textContent = `Beschikbare tijden voor ${dateDisplay}`;
     document.getElementById('bookingForm').style.display = 'none';
@@ -287,17 +285,17 @@ function showBookingForm() {
     const form = document.getElementById('bookingForm');
     form.style.display = 'block';
     
-    // Parse date and format manually to avoid ANY timezone issues
+    // Parse date in NL timezone
     const [year, month, day] = selectedDate.split('-').map(Number);
-    const date = new Date(year, month - 1, day, 12, 0, 0);
     
-    // Get day name manually
-    const dayNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
-    const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
-    
-    const dayName = dayNames[date.getDay()];
-    const monthName = monthNames[date.getMonth()];
-    const dateStr = `${dayName} ${date.getDate()} ${monthName} ${date.getFullYear()}`;
+    // Force NL locale formatting
+    const dateStr = new Intl.DateTimeFormat('nl-NL', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'Europe/Amsterdam'
+    }).format(new Date(year, month - 1, day));
     
     const endTime = calculateEndTime(selectedTime);
     
