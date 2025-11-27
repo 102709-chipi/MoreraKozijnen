@@ -231,7 +231,9 @@ function selectDate(dateStr) {
     renderCalendar();
     renderTimeSlots();
     
-    const date = new Date(dateStr);
+    // Parse date correctly to avoid timezone issues
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     const dateDisplay = date.toLocaleDateString('nl-NL', { 
         weekday: 'long', 
         year: 'numeric', 
