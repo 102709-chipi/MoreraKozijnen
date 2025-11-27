@@ -231,17 +231,25 @@ function selectDate(dateStr) {
     renderCalendar();
     renderTimeSlots();
     
-    // Parse date in NL timezone
-    const [year, month, day] = dateStr.split('-').map(Number);
+    // GEEN Date object gebruiken - pure string parsing
+    const [yearStr, monthStr, dayStr] = dateStr.split('-');
+    const year = parseInt(yearStr);
+    const month = parseInt(monthStr) - 1; // 0-based voor Date
+    const day = parseInt(dayStr);
     
-    // Force NL locale formatting
-    const dateDisplay = new Intl.DateTimeFormat('nl-NL', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'Europe/Amsterdam'
-    }).format(new Date(year, month - 1, day));
+    // Maak date object ALLEEN voor dag van de week
+    const tempDate = new Date(year, month, day);
+    const dayOfWeek = tempDate.getDay();
+    
+    const dayNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+    const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+    
+    // Format: "woensdag 27 november 2025"
+    const dateDisplay = `${dayNames[dayOfWeek]} ${day} ${monthNames[month]} ${year}`;
+    
+    console.log('DEBUG - Selected date:', dateStr);
+    console.log('DEBUG - Parsed day:', day);
+    console.log('DEBUG - Display:', dateDisplay);
     
     document.getElementById('selectedDateDisplay').textContent = `Beschikbare tijden voor ${dateDisplay}`;
     document.getElementById('bookingForm').style.display = 'none';
@@ -285,17 +293,19 @@ function showBookingForm() {
     const form = document.getElementById('bookingForm');
     form.style.display = 'block';
     
-    // Parse date in NL timezone
-    const [year, month, day] = selectedDate.split('-').map(Number);
+    // GEEN Date object gebruiken - pure string parsing
+    const [yearStr, monthStr, dayStr] = selectedDate.split('-');
+    const year = parseInt(yearStr);
+    const month = parseInt(monthStr) - 1;
+    const day = parseInt(dayStr);
     
-    // Force NL locale formatting
-    const dateStr = new Intl.DateTimeFormat('nl-NL', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'Europe/Amsterdam'
-    }).format(new Date(year, month - 1, day));
+    const tempDate = new Date(year, month, day);
+    const dayOfWeek = tempDate.getDay();
+    
+    const dayNames = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
+    const monthNames = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+    
+    const dateStr = `${dayNames[dayOfWeek]} ${day} ${monthNames[month]} ${year}`;
     
     const endTime = calculateEndTime(selectedTime);
     
