@@ -330,12 +330,19 @@ async function submitAppointment(e) {
         // 1. Maak of vind klant
         let customer;
         const existingCustomer = await fetch(`${API_URL}/customers`);
+        
+        if (!existingCustomer.ok) {
+            throw new Error(`Fout bij ophalen klanten: ${existingCustomer.status}`);
+        }
+        
         const customers = await existingCustomer.json();
         const found = customers.find(c => c.email === email);
 
         if (found) {
             customer = found;
+            console.log('Bestaande klant gevonden:', customer);
         } else {
+            console.log('Nieuwe klant aanmaken...');
             const createCustomer = await fetch(`${API_URL}/customers`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -347,7 +354,14 @@ async function submitAppointment(e) {
                     notes: additionalInfo
                 })
             });
+            
+            if (!createCustomer.ok) {
+                const errorText = await createCustomer.text();
+                throw new Error(`Fout bij aanmaken klant: ${createCustomer.status} - ${errorText}`);
+            }
+            
             customer = await createCustomer.json();
+            console.log('Nieuwe klant aangemaakt:', customer);
         }
 
         // 2. Maak afspraak
@@ -366,23 +380,29 @@ async function submitAppointment(e) {
             notes: `Aanvraag via website. Tel: ${phone}`
         };
 
+        console.log('Afspraak data:', appointmentData);
+
         const createAppointment = await fetch(`${API_URL}/appointments`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(appointmentData)
         });
 
-        if (createAppointment.ok) {
-            showSuccess(`Uw afspraak is succesvol aangevraagd! We sturen een bevestiging naar ${email}`);
-            resetForm();
-            await loadAvailableSlots();
-        } else {
-            throw new Error('Kon afspraak niet aanmaken');
+        if (!createAppointment.ok) {
+            const errorText = await createAppointment.text();
+            throw new Error(`Fout bij aanmaken afspraak: ${createAppointment.status} - ${errorText}`);
         }
+
+        const newAppointment = await createAppointment.json();
+        console.log('Afspraak aangemaakt:', newAppointment);
+        
+        showSuccess(`Uw afspraak is succesvol aangevraagd! We sturen een bevestiging naar ${email}`);
+        resetForm();
+        await loadAvailableSlots();
 
     } catch (error) {
         console.error('Error submitting appointment:', error);
-        showError('Er is iets misgegaan. Probeer het opnieuw of neem contact met ons op.');
+        showError(`Er is iets misgegaan: ${error.message}. Probeer het opnieuw of neem contact met ons op.`);
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Afspraak Aanvragen';
