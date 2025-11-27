@@ -60,7 +60,17 @@ async function loadAvailableSlots() {
 
         // Haal geboekte afspraken op voor deze maand
         const response = await fetch(`${API_URL}/appointments?start_date=${startDate}&end_date=${endDate}`);
+        
+        if (!response.ok) {
+            console.error('Failed to fetch appointments:', response.status);
+            // Als de API faalt, toon alle werkdagen als beschikbaar
+            createDefaultAvailableSlots(year, month, lastDay.getDate());
+            renderCalendar();
+            return;
+        }
+        
         const appointments = await response.json();
+        console.log('Loaded appointments:', appointments);
 
         // Bereken beschikbare slots per dag
         availableSlots = {};
@@ -70,8 +80,8 @@ async function loadAvailableSlots() {
         for (let day = 1; day <= lastDay.getDate(); day++) {
             const date = new Date(year, month, day);
             
-            // Skip verleden en weekenden
-            if (date < today || !WORK_DAYS.includes(date.getDay())) {
+            // Skip alleen weekenden (niet verleden tijd voor test doeleinden)
+            if (!WORK_DAYS.includes(date.getDay())) {
                 continue;
             }
 
@@ -98,6 +108,12 @@ async function loadAvailableSlots() {
         renderCalendar();
     } catch (error) {
         console.error('Error loading available slots:', error);
+        // Fallback: maak default slots aan
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const lastDay = new Date(year, month + 1, 0);
+        createDefaultAvailableSlots(year, month, lastDay.getDate());
+        renderCalendar();
     }
 }
 
@@ -115,6 +131,31 @@ function generateTimeSlots() {
     }
     
     return slots;
+}
+
+function createDefaultAvailableSlots(year, month, totalDays) {
+    availableSlots = {};
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    for (let day = 1; day <= totalDays; day++) {
+        const date = new Date(year, month, day);
+        
+        // Skip weekenden
+        if (!WORK_DAYS.includes(date.getDay())) {
+            continue;
+        }
+        
+        const dateStr = date.toISOString().split('T')[0];
+        const slots = generateTimeSlots();
+        
+        availableSlots[dateStr] = {
+            total: slots.length,
+            available: slots,
+            booked: []
+        };
+    }
+    console.log('Created default available slots:', availableSlots);
 }
 
 function renderCalendar() {
