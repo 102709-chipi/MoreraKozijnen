@@ -9,19 +9,28 @@ console.log('DB_NAME:', process.env.DB_NAME || 'NOT SET');
 console.log('DB_USER:', process.env.DB_USER || 'NOT SET');
 console.log('DB_PASS:', process.env.DB_PASS ? '***SET***' : 'NOT SET');
 
-// PostgreSQL connection pool
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'kozijnen_db',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASS,
-  ssl: process.env.DB_HOST && process.env.DB_HOST.includes('render.com') ? {
-    rejectUnauthorized: false
-  } : false
-});
-
-console.log('Pool created with SSL:', pool.options.ssl ? 'enabled' : 'disabled');
+// Prefer a full connection string if provided (e.g. Render's "External Database URL")
+let pool;
+if (process.env.DATABASE_URL) {
+  console.log('Using DATABASE_URL connection string (connectionString)');
+  // When using a hosted Render DB, require SSL but allow self-signed certs
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+  console.log('Pool created with SSL: enabled (via DATABASE_URL)');
+} else {
+  console.log('Using individual DB_* environment variables');
+  pool = new Pool({
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME || 'kozijnen_db',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASS,
+    ssl: process.env.DB_HOST && process.env.DB_HOST.includes('render.com') ? { rejectUnauthorized: false } : false
+  });
+  console.log('Pool created with SSL:', pool.options && pool.options.ssl ? 'enabled' : 'disabled');
+}
 
 // Test database connection
 pool.on('connect', () => {
