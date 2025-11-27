@@ -9,7 +9,8 @@
         .agenda-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
+            background: #f8f9fa;
         }
 
         .view-toggle {
@@ -19,41 +20,51 @@
         }
 
         .view-toggle button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: 2px solid #0066cc;
             background: white;
             color: #0066cc;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .view-toggle button:hover {
+            background: #e6f2ff;
         }
 
         .view-toggle button.active {
             background: #0066cc;
             color: white;
+            box-shadow: 0 4px 8px rgba(0,102,204,0.3);
         }
 
         .calendar-view {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: #ddd;
-            border: 1px solid #ddd;
+            gap: 2px;
+            background: #e0e0e0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .calendar-header {
-            background: #0066cc;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
             color: white;
-            padding: 10px;
+            padding: 15px;
             text-align: center;
             font-weight: bold;
+            font-size: 14px;
         }
 
         .calendar-day {
             background: white;
-            min-height: 100px;
-            padding: 5px;
+            min-height: 120px;
+            padding: 8px;
             position: relative;
         }
 
@@ -64,24 +75,33 @@
 
         .calendar-day.today {
             background: #e8f5e9;
+            border: 2px solid #4caf50;
         }
 
         .day-number {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
         }
 
         .appointment-item {
             background: #0066cc;
             color: white;
-            padding: 3px 5px;
-            margin: 2px 0;
+            padding: 4px 6px;
+            margin: 3px 0;
             font-size: 11px;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            transition: transform 0.2s;
+        }
+
+        .appointment-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .appointment-item.bevestigd {
@@ -106,15 +126,22 @@
 
         .appointment-list {
             display: grid;
-            gap: 15px;
+            gap: 20px;
         }
 
         .appointment-card {
-            border: 1px solid #ddd;
-            border-left: 4px solid #0066cc;
-            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #0066cc;
+            padding: 20px;
             background: white;
-            border-radius: 5px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .appointment-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
         }
 
         .appointment-card.bevestigd {
@@ -133,18 +160,18 @@
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .appointment-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             color: #0066cc;
         }
 
         .appointment-status {
-            padding: 3px 10px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 15px;
             font-size: 12px;
             font-weight: bold;
         }
@@ -171,9 +198,9 @@
 
         .appointment-details {
             display: grid;
-            gap: 5px;
-            color: #666;
-            font-size: 14px;
+            gap: 8px;
+            color: #555;
+            font-size: 15px;
         }
 
         .modal {
@@ -183,7 +210,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             z-index: 1000;
         }
 
@@ -195,54 +222,71 @@
 
         .modal-content {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 600px;
+            padding: 35px;
+            border-radius: 15px;
+            max-width: 650px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h2 {
+            color: #0066cc;
+            margin-bottom: 25px;
+            font-size: 28px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #0066cc;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0066cc;
         }
 
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 90px;
         }
 
         .form-actions {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
+            font-size: 15px;
         }
 
         .btn-primary {
@@ -252,15 +296,16 @@
 
         .btn-primary:hover {
             background: #0052a3;
+            box-shadow: 0 4px 12px rgba(0,102,204,0.3);
         }
 
         .btn-secondary {
-            background: #ddd;
+            background: #e0e0e0;
             color: #333;
         }
 
         .btn-secondary:hover {
-            background: #ccc;
+            background: #d0d0d0;
         }
 
         .btn-danger {
@@ -270,31 +315,40 @@
 
         .btn-danger:hover {
             background: #c82333;
+            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
         }
 
         .filters {
             display: flex;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
         .filters select {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 10px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
         }
 
         .calendar-navigation {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .calendar-navigation h2 {
             margin: 0;
             color: #0066cc;
+            font-size: 26px;
         }
 
         .nav-buttons {
@@ -304,8 +358,30 @@
 
         .loading {
             text-align: center;
-            padding: 40px;
+            padding: 60px;
             color: #666;
+            font-size: 18px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .calendar-view {
+                gap: 1px;
+            }
+            
+            .calendar-day {
+                min-height: 80px;
+                padding: 5px;
+            }
+            
+            .day-number {
+                font-size: 14px;
+            }
+            
+            .appointment-item {
+                font-size: 10px;
+                padding: 3px 4px;
+            }
         }
     </style>
 </head>
@@ -365,10 +441,10 @@
       </div>
     </header>
 
-    <section class="hero small-hero">
-        <div class="hero-content">
-            <h1>Afspraken Agenda</h1>
-            <p>Beheer uw afspraken en klanten</p>
+    <section class="hero small-hero" style="background: linear-gradient(135deg, #0066cc 0%, #004a99 100%); padding: 60px 0;">
+        <div class="hero-content" style="text-align: center;">
+            <h1 style="color: white; font-size: 48px; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">Afspraken Agenda</h1>
+            <p style="color: white; font-size: 20px; opacity: 0.95;">Beheer uw afspraken en klanten</p>
         </div>
     </section>
 
