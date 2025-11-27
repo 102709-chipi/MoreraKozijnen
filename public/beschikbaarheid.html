@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beschikbaarheid - Vakman Kozijnen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .availability-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .week-view {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .week-header h2 {
+            margin: 0;
+            color: #0066cc;
+        }
+
+        .week-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .week-nav button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .week-nav button:hover {
+            background: #0052a3;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .day-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: #0066cc;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .day-header .day-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .day-header .day-date {
+            font-size: 24px;
+            margin: 5px 0;
+        }
+
+        .day-header .month-year {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .day-slots {
+            padding: 15px;
+        }
+
+        .slot-item {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .slot-item.available {
+            background: #e6f2ff;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .slot-item.booked {
+            background: #ffebee;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .no-slots {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .day-card.weekend {
+            opacity: 0.6;
+        }
+
+        .day-card.weekend .day-header {
+            background: #757575;
+        }
+
+        .legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        .legend-box.available {
+            background: #e6f2ff;
+            border: 2px solid #0066cc;
+        }
+
+        .legend-box.booked {
+            background: #ffebee;
+            border: 2px solid #f44336;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .cta-section h3 {
+            margin-top: 0;
+        }
+
+        .cta-btn {
+            background: white;
+            color: #0066cc;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .cta-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .info-text {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .days-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+      <!-- Top bar -->
+      <div class="top-bar">
+        <div class="container">
+          <div class="top-left">
+            <div class="brand">
+              <div class="logo-circle">VK</div>
+              <div class="brand-text">
+                <span class="brand-name">Vakman Kozijnen</span>
+                <span class="brand-tagline">Professionele kozijnspecialist</span>
+              </div>
+            </div>
+            <div class="oks-reference">
+              <span class="tagline-text">In samenwerking met</span>
+              <div class="oks-logo-wrapper">
+                <div class="oks-main-logo">
+                  <span class="oks-main-text-white">ok</span><span class="oks-main-text-black">s</span>
+                </div>
+                <div class="oks-sub-logo">
+                  <span class="oks-sub-text">onlinekozijnshop</span>
+                </div>
+              </div>
+              <div class="google-reviews">
+                <span class="google-text">Google</span>
+                <div class="stars">★★★★★</div>
+                <span class="review-count">25+ recensies</span>
+              </div>
+            </div>
+          </div>
+          <div class="top-right">
+            <nav class="main-nav">
+              <a href="index.html#diensten">Diensten</a>
+              <a href="index.html#galerij">Galerij</a>
+              <a href="index.html#calculator">Calculator</a>
+              <a href="afspraak-maken.html">Afspraak Maken</a>
+              <a href="index.html#contact">Contact</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bottom bar -->
+      <div class="bottom-bar">
+        <div class="container">
+          <nav class="product-nav">
+            <a href="houten-kozijnen.html">Houten Kozijnen</a>
+            <a href="kunststof-kozijnen.html">Kunststof Kozijnen</a>
+            <a href="aluminium-kozijnen.html">Aluminium Kozijnen</a>
+            <a href="kozijn-deuren.html">Kozijn Deuren</a>
+            <a href="montage.html">Montage</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero small-hero">
+        <div class="hero-content">
+            <h1>Onze Beschikbaarheid</h1>
+            <p>Bekijk wanneer wij beschikbaar zijn voor een afspraak</p>
+        </div>
+    </section>
+
+    <div class="availability-container">
+        <div class="info-text">
+            <strong>ℹ️ Let op:</strong> Dit is een overzicht van onze beschikbaarheid. 
+            Klik op "Afspraak Maken" om een tijdslot te reserveren.
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box available"></div>
+                <span><strong>Beschikbaar</strong> - U kunt een afspraak maken</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box booked"></div>
+                <span><strong>Bezet</strong> - Niet beschikbaar</span>
+            </div>
+        </div>
+
+        <div class="week-view">
+            <div class="week-header">
+                <button class="week-nav" id="prevWeek">← Vorige Week</button>
+                <h2 id="weekTitle">Week van ...</h2>
+                <button class="week-nav" id="nextWeek">Volgende Week →</button>
+            </div>
+
+            <div class="days-grid" id="daysGrid">
+                <!-- Wordt via JavaScript gevuld -->
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Klaar om een afspraak te maken?</h3>
+            <p>Selecteer een beschikbare tijd en vul uw gegevens in</p>
+            <a href="afspraak-maken.html" class="cta-btn">Maak Een Afspraak</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Vakman Kozijnen. Alle rechten voorbehouden.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let currentWeekStart = getMonday(new Date());
+
+        const WORK_HOURS = { start: 9, end: 17, breakStart: 12, breakEnd: 13 };
+        const WORK_DAYS = [1, 2, 3, 4, 5];
+
+        function getMonday(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+
+        function generateTimeSlots() {
+            const slots = [];
+            for (let hour = WORK_HOURS.start; hour < WORK_HOURS.end; hour++) {
+                if (hour >= WORK_HOURS.breakStart && hour < WORK_HOURS.breakEnd) continue;
+                slots.push(`${String(hour).padStart(2, '0')}:00`);
+            }
+            return slots;
+        }
+
+        async function loadWeekView() {
+            const weekEnd = new Date(currentWeekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            const weekStartStr = currentWeekStart.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+            const weekEndStr = weekEnd.toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('weekTitle').textContent = `${weekStartStr} - ${weekEndStr}`;
+
+            try {
+                const startDate = currentWeekStart.toISOString().split('T')[0];
+                const endDate = weekEnd.toISOString().split('T')[0];
+                
+                const response = await fetch(`${API_URL}/appointments?start_date=${startDate}&end_date=${endDate}`);
+                const appointments = await response.json();
+
+                renderWeek(appointments);
+            } catch (error) {
+                console.error('Error loading appointments:', error);
+                renderWeek([]);
+            }
+        }
+
+        function renderWeek(appointments) {
+            const grid = document.getElementById('daysGrid');
+            let html = '';
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(currentWeekStart);
+                date.setDate(date.getDate() + i);
+                
+                const dateStr = date.toISOString().split('T')[0];
+                const dayOfWeek = date.getDay();
+                const isWeekend = !WORK_DAYS.includes(dayOfWeek);
+                const isPast = date < today;
+                
+                const dayNames = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+                const monthNames = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+
+                html += `<div class="day-card ${isWeekend ? 'weekend' : ''}">
+                    <div class="day-header">
+                        <div class="day-name">${dayNames[dayOfWeek]}</div>
+                        <div class="day-date">${date.getDate()}</div>
+                        <div class="month-year">${monthNames[date.getMonth()]} ${date.getFullYear()}</div>
+                    </div>
+                    <div class="day-slots">`;
+
+                if (isWeekend) {
+                    html += '<div class="no-slots">Gesloten</div>';
+                } else if (isPast) {
+                    html += '<div class="no-slots">Verstreken</div>';
+                } else {
+                    const allSlots = generateTimeSlots();
+                    const bookedSlots = appointments
+                        .filter(apt => apt.appointment_date && apt.appointment_date.startsWith(dateStr))
+                        .map(apt => apt.start_time ? apt.start_time.substring(0, 5) : null)
+                        .filter(Boolean);
+
+                    if (allSlots.length === 0) {
+                        html += '<div class="no-slots">Geen tijden beschikbaar</div>';
+                    } else {
+                        allSlots.forEach(slot => {
+                            const isBooked = bookedSlots.includes(slot);
+                            html += `<div class="slot-item ${isBooked ? 'booked' : 'available'}">${slot}</div>`;
+                        });
+                    }
+                }
+
+                html += `</div></div>`;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        document.getElementById('prevWeek').addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            loadWeekView();
+        });
+
+        document.getElementById('nextWeek').addEventListener('click', () => {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            loadWeekView();
+        });
+
+        loadWeekView();
+    </script>
+</body>
+</html>
