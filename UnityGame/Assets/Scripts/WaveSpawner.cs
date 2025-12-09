@@ -90,6 +90,19 @@ public class Wave : MonoBehaviour
 {
     [HideInInspector]
     public float moveSpeed = 5f;
+    
+    // Cache GameManager referentie voor betere performance
+    private GameManager gameManager;
+
+    void Start()
+    {
+        // Zoek GameManager eenmalig bij start
+        gameManager = FindObjectOfType<GameManager>();
+        if (gameManager == null)
+        {
+            Debug.LogWarning("GameManager niet gevonden in scene!");
+        }
+    }
 
     void Update()
     {
@@ -105,8 +118,7 @@ public class Wave : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            // Roep game over aan via GameManager
-            GameManager gameManager = FindObjectOfType<GameManager>();
+            // Roep game over aan via gecachte GameManager
             if (gameManager != null)
             {
                 gameManager.GameOver();

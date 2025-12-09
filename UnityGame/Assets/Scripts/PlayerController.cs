@@ -34,6 +34,12 @@ public class PlayerController : MonoBehaviour
     {
         // Haal Rigidbody2D component op
         rb = GetComponent<Rigidbody2D>();
+        
+        // Check of Rigidbody2D aanwezig is
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody2D component niet gevonden op " + gameObject.name + "!");
+        }
     }
 
     void Update()

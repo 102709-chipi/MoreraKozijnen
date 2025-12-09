@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         {
             gameIsOver = true;
             
-            Debug.Log("GAME OVER! Eindcore: " + Mathf.FloorToInt(currentScore));
+            Debug.Log("GAME OVER! Eindscore: " + Mathf.FloorToInt(currentScore));
             
             // Toon game over panel als beschikbaar
             if (gameOverPanel != null)
