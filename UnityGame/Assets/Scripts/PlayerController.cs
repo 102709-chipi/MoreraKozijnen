@@ -57,7 +57,10 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Automatisch naar rechts bewegen
-        rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+        if (rb != null)
+        {
+            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+        }
     }
 
     /// <summary>
@@ -66,8 +69,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        // Alleen springen als op de grond
-        if (isGrounded)
+        // Alleen springen als op de grond en Rigidbody2D beschikbaar is
+        if (isGrounded && rb != null)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
@@ -79,8 +82,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void CheckGround()
     {
-        // Check overlap met grond layer
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // Check overlap met grond layer (alleen als groundCheck ingesteld is)
+        if (groundCheck != null)
+        {
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        }
     }
 
     /// <summary>
