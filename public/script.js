@@ -15,7 +15,7 @@ images.forEach(src => {
   gallery.appendChild(img);
 });
 
-// Price calculator
+//calculator
 const surfaceAreaInput = document.getElementById('surface-area');
 const doorsInput = document.getElementById('doors');
 const glassTypeSelect = document.getElementById('glass-type');
@@ -25,45 +25,39 @@ function calculatePrices() {
   
   const glassType = glassTypeSelect.value;
   
-  // If surface area is empty, show default base prices (no surface area)
+  // 
   if (surfaceAreaValue === '') {
-    // Same base prices for both glass types when no surface area
+   
     document.getElementById('plastic-price').textContent = '€ 2.348';
-    document.getElementById('wood-price').textContent = '€ 2.589';
     document.getElementById('aluminum-price').textContent = '€ 2.709';
-    document.getElementById('wood-diff').textContent = '+10%';
     document.getElementById('aluminum-diff').textContent = '+15%';
     return;
   }
   
   const surfaceArea = parseFloat(surfaceAreaValue);
-  const doors = parseInt(doorsValue) || 1;
+  const doors = parseInt(doorsValue) || 0;
   
   // Base prices (starting price with 1 door, no surface area) for HR++
   const basePricesHRPlus = {
     kunststof: 2348,
-    hout: 2589,
     aluminium: 2709
   };
   
   // Base prices for HR+++ (same as HR++ base)
   const basePricesHRPlusPlus = {
     kunststof: 2348,
-    hout: 2589,
     aluminium: 2709
   };
   
   // Cost per m² of surface area for HR++
   const pricePerM2HRPlus = {
     kunststof: 917,   // (20688 - 2348) / 20 = 917
-    hout: 1032,       // (23229 - 2589) / 20 = 1032
     aluminium: 1090   // (24509 - 2709) / 20 = 1090
   };
   
   // Cost per m² of surface area for HR+++ (calculated from 1m² data)
   const pricePerM2HRPlusPlus = {
     kunststof: 974,   // 3322 - 2348 = 974 per m²
-    hout: 1089,       // 3678 - 2589 = 1089 per m²
     aluminium: 1147   // Exact value to match OKS website
   };
   
@@ -73,18 +67,14 @@ function calculatePrices() {
   
   // Calculate prices: (base price * doors) + (surface area * price per m²)
   const kunststofPrice = Math.round(basePrices.kunststof * doors + pricePerM2.kunststof * surfaceArea);
-  const houtPrice = Math.round(basePrices.hout * doors + pricePerM2.hout * surfaceArea);
   const aluminiumPrice = Math.round(basePrices.aluminium * doors + pricePerM2.aluminium * surfaceArea);
   
   // Calculate differences
-  const houtDiff = Math.round(((houtPrice - kunststofPrice) / kunststofPrice) * 100);
   const aluminiumDiff = Math.round(((aluminiumPrice - kunststofPrice) / kunststofPrice) * 100);
   
   // Update display
   document.getElementById('plastic-price').textContent = `€ ${kunststofPrice.toLocaleString('nl-NL')}`;
-  document.getElementById('wood-price').textContent = `€ ${houtPrice.toLocaleString('nl-NL')}`;
   document.getElementById('aluminum-price').textContent = `€ ${aluminiumPrice.toLocaleString('nl-NL')}`;
-  document.getElementById('wood-diff').textContent = `+${houtDiff}%`;
   document.getElementById('aluminum-diff').textContent = `+${aluminiumDiff}%`;
 }
 
@@ -132,7 +122,6 @@ priceEmailForm.addEventListener('submit', async (e) => {
   const doors = parseInt(doorsInput.value) || 1;
   const glassType = glassTypeSelect.value;
   const kunststofPrice = document.getElementById('plastic-price').textContent;
-  const houtPrice = document.getElementById('wood-price').textContent;
   const aluminiumPrice = document.getElementById('aluminum-price').textContent;
   const subsidyTotal = document.getElementById('subsidy-total').textContent;
   
@@ -143,7 +132,6 @@ priceEmailForm.addEventListener('submit', async (e) => {
     doors,
     glassType: glassType === 'hr-plus-plus' ? 'HR+++' : 'HR++',
     kunststofPrice,
-    houtPrice,
     aluminiumPrice,
     subsidyTotal
   };
