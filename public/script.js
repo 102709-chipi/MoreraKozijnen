@@ -1,18 +1,21 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Simple gallery (placeholder images). Replace with real project photos
-const gallery = document.getElementById('gallery');
-const images = [
-  'https://images.unsplash.com/photo-1523419409543-a3374a631b2b?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1596867559249-23fa3a2242ba?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154340-1e8e8e6b3d9b?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1200&auto=format&fit=crop'
-];
-images.forEach(src => {
-  const img = document.createElement('img');
-  img.src = src;
-  img.alt = 'Kozijn project';
-  gallery.appendChild(img);
+// Lightbox functionality
+function openLightbox(imgSrc) {
+  document.getElementById('lightbox').style.display = 'block';
+  document.getElementById('lightbox-img').src = imgSrc;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// Add click event to gallery images
+const galleryImages = document.querySelectorAll('.gallery img');
+galleryImages.forEach(img => {
+  img.addEventListener('click', () => openLightbox(img.src));
 });
 
 //calculator
