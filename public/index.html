@@ -88,42 +88,52 @@
 
       <section id="calculator" class="container section">
         <div class="breadcrumb">
-          <span>Home</span> > <span>Kozijn prijsindicator leveren en plaatsen</span>
+          <span>Home</span> > <span>Kozijn Prijscalculator</span>
         </div>
         
-        <h1 class="calculator-title">Kozijn prijsindicator kunststof kozijnen vervangen</h1>
+        <h1 class="calculator-title">📊 Bereken direct uw kozijn vervangingskosten</h1>
         
         <div class="calculator-intro">
-          <p>De <strong>Kozijn prijsindicator</strong> is bedoeld om snel te bepalen of het vervangen van kozijnen binnen uw budget past. De prijsindicatie is gebaseerd op de oppervlakte van de kozijnen, waarbij gemiddelde basisprijzen per oppervlakte worden gebruikt. Deuren en glas zijn specificerbaar.</p>
-          <p>De prijzen zijn gebaseerd op <a href="#" class="link">Vereniging Eigen Huis</a>. HR+++ triple glas prijzen zijn een interne schatting, niet van Vereniging Eigen Huis.</p>
-          <p><strong>Let op:</strong> Voor grote ruiten boven 3m² kan de aangegeven prijs onvoldoende zijn. Dikker glas brengt meer kosten en kraanwerk met zich mee. Kozijnen onder 1m² worden als 1m² behandeld.</p>
+          <p><strong>Hoe werkt het?</strong> Vul hieronder uw gegevens in en ontvang direct een prijsindicatie voor het vervangen van uw kozijnen, inclusief montage.</p>
+          <p>💡 <strong>Tip:</strong> Meet de breedte en hoogte van al uw kozijnen en vermenigvuldig deze voor de totale oppervlakte in m².</p>
         </div>
 
         <div class="calculator-section">
-          <h2>Kozijnen vervangen kosten berekenen</h2>
+          <h2>🔧 Bereken uw kosten in 3 stappen</h2>
           
           <div class="calculator-inputs">
             <div class="input-group">
-              <label>Oppervlakte kozijnen</label>
+              <label>
+                <strong>1️⃣ Totale oppervlakte van alle kozijnen</strong>
+                <span class="help-text">Breedte × hoogte van elk kozijn, alles bij elkaar opgeteld</span>
+              </label>
               <div class="input-with-unit">
-                <input type="number" id="surface-area" value="" min="0.1" step="0.1" placeholder="0.1">
-                <span class="unit">oppervlakte in m²</span>
+                <input type="number" id="surface-area" value="" min="1" step="0.5" placeholder="Bijvoorbeeld: 15">
+                <span class="unit">m² (vierkante meter)</span>
               </div>
             </div>
             
             <div class="input-group">
-              <label>Aantal deuren</label>
-              <input type="number" id="doors" value="1" min="0" step="1">
+              <label>
+                <strong>2️⃣ Aantal deuren</strong>
+                <span class="help-text">Hoeveel deuren wilt u laten vervangen? (0 = alleen ramen)</span>
+              </label>
+              <input type="number" id="doors" value="1" min="0" step="1" placeholder="Bijvoorbeeld: 1">
             </div>
             
             <div class="input-group">
-              <label>Glassoort</label>
+              <label>
+                <strong>3️⃣ Kies uw glastype</strong>
+                <span class="help-text">HR++ = standaard isolatie | HR+++ = triple glas, beste isolatie</span>
+              </label>
               <select id="glass-type">
-                <option value="hr-plus">HR++</option>
-                <option value="hr-plus-plus">HR+++</option>
+                <option value="hr-plus">HR++ Glas (Standaard)</option>
+                <option value="hr-plus-plus">HR+++ Triple Glas (Premium)</option>
               </select>
             </div>
           </div>
+          
+          <button class="btn btn-calculate" onclick="calculatePrices()">💰 Bereken Prijs Nu</button>
 
           <div class="results-table">
             <table>
@@ -132,21 +142,49 @@
                   <th>Materiaal:</th>
                   <th>Kunststof</th>
                   <th>Aluminium</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Kosten *</strong></td>
-                  <td id="plastic-price">€ 2.348</td>
-                  <td id="aluminum-price">€ 2.709</td>
-                </tr>
-                <tr>
-                  <td><strong>t.o.v. Kunststof</strong></td>
-                  <td>-</td>
-                  <td id="aluminum-diff">+15%</td>
-                </tr>
-              </tbody>
-            </table>
+
+          <div class="results-section" id="results" style="display: none;">
+            <h2>✨ Uw Prijsindicatie</h2>
+            <p class="results-intro">Dit zijn de geschatte kosten voor het vervangen van uw kozijnen, inclusief montage:</p>
+            
+            <div class="results-cards">
+              <div class="result-card plastic">
+                <div class="card-header">
+                  <h3>🔲 Kunststof Kozijnen</h3>
+                  <span class="badge recommended">MEEST GEKOZEN</span>
+                </div>
+                <div class="card-price">
+                  <span class="currency">€</span>
+                  <span class="amount" id="plastic-price">2.348</span>
+                </div>
+                <ul class="card-features">
+                  <li>✓ Onderhoudsarm</li>
+                  <li>✓ Goede isolatie</li>
+                  <li>✓ Lange levensduur</li>
+                  <li>✓ Beste prijs-kwaliteit</li>
+                </ul>
+              </div>
+              
+              <div class="result-card aluminum">
+                <div class="card-header">
+                  <h3>⚙️ Aluminium Kozijnen</h3>
+                  <span class="badge premium">PREMIUM</span>
+                </div>
+                <div class="card-price">
+                  <span class="currency">€</span>
+                  <span class="amount" id="aluminum-price">2.709</span>
+                </div>
+                <div class="price-diff">
+                  <span id="aluminum-diff">+15%</span> t.o.v. Kunststof
+                </div>
+                <ul class="card-features">
+                  <li>✓ Moderne uitstraling</li>
+                  <li>✓ Slanke profielen</li>
+                  <li>✓ Zeer duurzaam</li>
+                  <li>✓ Geen onderhoud</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 

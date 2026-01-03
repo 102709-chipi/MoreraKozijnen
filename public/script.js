@@ -56,12 +56,10 @@ function calculatePrices() {
   
   const glassType = glassTypeSelect.value;
   
-  // 
-  if (surfaceAreaValue === '') {
-   
-    document.getElementById('plastic-price').textContent = '€ 2.348';
-    document.getElementById('aluminum-price').textContent = '€ 2.709';
-    document.getElementById('aluminum-diff').textContent = '+15%';
+  // Validatie
+  if (surfaceAreaValue === '' || parseFloat(surfaceAreaValue) <= 0) {
+    alert('⚠️ Vul een geldig oppervlakte in (bijvoorbeeld 15 m²)');
+    document.getElementById('results').style.display = 'none';
     return;
   }
   
@@ -82,14 +80,14 @@ function calculatePrices() {
   
   // Cost per m² of surface area for HR++
   const pricePerM2HRPlus = {
-    kunststof: 917,   // (20688 - 2348) / 20 = 917
-    aluminium: 1090   // (24509 - 2709) / 20 = 1090
+    kunststof: 917,
+    aluminium: 1090
   };
   
-  // Cost per m² of surface area for HR+++ (calculated from 1m² data)
+  // Cost per m² of surface area for HR+++
   const pricePerM2HRPlusPlus = {
-    kunststof: 974,   // 3322 - 2348 = 974 per m²
-    aluminium: 1147   // Exact value to match OKS website
+    kunststof: 974,
+    aluminium: 1147
   };
   
   // Select the right prices based on glass type
@@ -104,18 +102,20 @@ function calculatePrices() {
   const aluminiumDiff = Math.round(((aluminiumPrice - kunststofPrice) / kunststofPrice) * 100);
   
   // Update display
-  document.getElementById('plastic-price').textContent = `€ ${kunststofPrice.toLocaleString('nl-NL')}`;
-  document.getElementById('aluminum-price').textContent = `€ ${aluminiumPrice.toLocaleString('nl-NL')}`;
+  document.getElementById('plastic-price').textContent = kunststofPrice.toLocaleString('nl-NL');
+  document.getElementById('aluminum-price').textContent = aluminiumPrice.toLocaleString('nl-NL');
   document.getElementById('aluminum-diff').textContent = `+${aluminiumDiff}%`;
+  
+  // Show results with animation
+  const resultsSection = document.getElementById('results');
+  resultsSection.style.display = 'block';
+  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-// Add event listeners
-surfaceAreaInput.addEventListener('input', calculatePrices);
-doorsInput.addEventListener('input', calculatePrices);
-glassTypeSelect.addEventListener('change', calculatePrices);
-
-// Initial calculation
-calculatePrices();
+// Verwijder automatische event listeners - alleen berekenen bij klik op knop
+// surfaceAreaInput.addEventListener('input', calculatePrices);
+// doorsInput.addEventListener('input', calculatePrices);
+// glassTypeSelect.addEventListener('change', calculatePrices);
 
 // Subsidy calculation
 function calculateSubsidy() {
