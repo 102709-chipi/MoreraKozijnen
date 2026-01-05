@@ -4,10 +4,9 @@ Dit project bevat een **simpele 2.5D wave jumping game** met Arduino button best
 
 ## 📂 Project Overzicht
 
-Dit repository bevat:
+Deze folder bevat:
 - **UnityGame/**: Unity wave jumping game scripts en documentatie
 - **Arduino/**: Arduino jump button code
-- **Web app**: Kozijnen website (bestaande functionaliteit)
 
 ## 🚀 Snel Starten
 
