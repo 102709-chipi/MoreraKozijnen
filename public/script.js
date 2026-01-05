@@ -56,15 +56,22 @@ function calculatePrices() {
   
   const glassType = glassTypeSelect.value;
   
-  // Validatie
-  if (surfaceAreaValue === '' || parseFloat(surfaceAreaValue) <= 0) {
-    alert('⚠️ Vul een geldig oppervlakte in (bijvoorbeeld 15 m²)');
+  // Parse values
+  const surfaceArea = surfaceAreaValue === '' ? 0 : parseFloat(surfaceAreaValue);
+  const doors = parseInt(doorsValue) || 0;
+  
+  // Validatie - minimaal oppervlakte OF deuren moet ingevuld zijn
+  if ((surfaceAreaValue === '' && doors === 0) || surfaceArea < 0 || doors < 0) {
+    alert('⚠️ Vul minimaal een oppervlakte (m²) of aantal deuren in');
     document.getElementById('results').style.display = 'none';
     return;
   }
   
-  const surfaceArea = parseFloat(surfaceAreaValue);
-  const doors = parseInt(doorsValue) || 0;
+  if (surfaceArea === 0 && doors === 0) {
+    alert('⚠️ Vul minimaal een oppervlakte (m²) of aantal deuren in');
+    document.getElementById('results').style.display = 'none';
+    return;
+  }
   
   // Base prices (starting price with 1 door, no surface area) for HR++
   const basePricesHRPlus = {
